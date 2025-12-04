@@ -1,3 +1,7 @@
-pandas
-scipy
-streamlit
+numpy>=2.1.0
+pandas>=2.2.0
+streamlit>=1.40.0
+plotly>=5.20.0
+# Nota: pyarrow no tiene wheels compilados para Python 3.14 aún.
+# Si lo necesitas, instala con: pip install --upgrade setuptools cmake
+# O considera usar una versión de Python anterior (3.13, 3.12, etc.)

@@ -1,52 +1,44 @@
-import pandas as pd
-import scipy.stats
 import streamlit as st
-import time
+import pandas as pd
+import plotly.graph_objects as go  # Importación de plotly.graph_objects como go
 
-# estas son variables de estado que se conservan cuando Streamlin vuelve a ejecutar este script
-if 'experiment_no' not in st.session_state:
-    st.session_state['experiment_no'] = 0
+st.header("Visualización de Datos de Vehículos")  # Encabezado de la aplicación
 
-if 'df_experiment_results' not in st.session_state:
-    st.session_state['df_experiment_results'] = pd.DataFrame(columns=['no', 'iteraciones', 'media'])
+# Botón para construir el histograma
+hist_button = st.button('Construir histograma')
+if hist_button:
+    # Escribir un mensaje en la aplicación
+    st.write(
+        'Creación de un histograma para el conjunto de datos de anuncios de venta de coches')
 
-st.header('Lanzar una moneda')
+    # Crear un histograma utilizando plotly.graph_objects
+    # Se crea una figura vacía y luego se añade un rastro de histograma
+    fig = go.Figure(data=[go.Histogram(x=car_data['odometer'])])
 
-chart = st.line_chart([0.5])
+    # Opcional: Puedes añadir un título al gráfico si lo deseas
+    fig.update_layout(title_text='Distribución del Odómetro')
 
-def toss_coin(n):
+    # Mostrar el gráfico Plotly interactivo en la aplicación Streamlit
+    # 'use_container_width=True' ajusta el ancho del gráfico al contenedor
+    st.plotly_chart(fig, use_container_width=True)
 
-    trial_outcomes = scipy.stats.bernoulli.rvs(p=0.5, size=n)
 
-    mean = None
-    outcome_no = 0
-    outcome_1_count = 0
+# Botón para construir el diagrama de dispersión
+disp_button = st.button('Construir diagrama de dispersión')
+if disp_button:
+    # Escribir un mensaje en la aplicación
+    st.write('Creación de un diagrama de dispersión para el conjunto de datos de anuncios de venta de coches')
 
-    for r in trial_outcomes:
-        outcome_no +=1
-        if r == 1:
-            outcome_1_count += 1
-        mean = outcome_1_count / outcome_no
-        chart.add_rows([mean])
-        time.sleep(0.05)
+    # Crear un diagrama de dispersión utilizando plotly.graph_objects
+    # Se crea una figura vacía y luego se añade un rastro de dispersión
+    fig = go.Figure(data=go.Scatter(
+        x=car_data['year'],
+        y=car_data['price'],
+        mode='markers'  # Modo de marcadores para el diagrama de dispersión
+    ))
 
-    return mean
+    # Opcional: Puedes añadir un título al gráfico si lo deseas
+    fig.update_layout(title_text='Diagrama de Dispersión: Año vs Precio')
 
-number_of_trials = st.slider('¿Número de intentos?', 1, 1000, 10)
-start_button = st.button('Ejecutar')
-
-if start_button:
-    st.write(f'Experimento con {number_of_trials} intentos en curso.')
-    st.session_state['experiment_no'] += 1
-    mean = toss_coin(number_of_trials)
-    st.session_state['df_experiment_results'] = pd.concat([
-        st.session_state['df_experiment_results'],
-        pd.DataFrame(data=[[st.session_state['experiment_no'],
-                            number_of_trials,
-                            mean]],
-                     columns=['no', 'iteraciones', 'media'])
-        ],
-        axis=0)
-    st.session_state['df_experiment_results'] = st.session_state['df_experiment_results'].reset_index(drop=True)
-
-st.write(st.session_state['df_experiment_results'])
+    # Mostrar el gráfico Plotly interactivo en la aplicación Streamlit
+    st.plotly_chart(fig, use_container_width=True)
