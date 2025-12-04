@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go  # Importación de plotly.graph_objects como go
 
+# Leer los datos del archivo CSV
+car_data = pd.read_csv('../vehicles_us.csv')
+
 st.header("Visualización de Datos de Vehículos")  # Encabezado de la aplicación
 
 # Botón para construir el histograma
