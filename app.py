@@ -36,7 +36,7 @@ if disp_button:
     fig = go.Figure(
         data=[go.Scatter(x=car_data['odometer'], y=car_data['price'], mode='markers')])
 
-    # Opcional: Puedes añadir un título al gráfico si lo deseas
+    # Título del gráfico
     fig.update_layout(title_text='Relación entre Odómetro y Precio')
 
     # Mostrar el gráfico Plotly interactivo en la aplicación Streamlit
